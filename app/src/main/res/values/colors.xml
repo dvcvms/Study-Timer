@@ -7,4 +7,13 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="backgroundMainActivity">#FF8073</color>
+    <color name="txtPomodoroMain">#ccc</color>
+    <color name="btnStartMain">#FF1800</color>
+    <color name="txtTimeMain">#FFFFFFFF</color>
+
+    <color name="colourUpNavigation">#FF5240</color>
+    <color name="buttoncolour">#FF000000</color>
+
 </resources>
