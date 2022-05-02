@@ -2,125 +2,132 @@ package com.example.myapppomodoro;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
-    private Button btnStartStopMain;
-    private TextView txtTimeMain;
+    //Объявили все элементы MainActivity====
+    private Button btnStartStopMainAct;
+    private ImageButton imbtnSettingsMainAct;
+    private TextView tvPomodoroMainAct;
+    private TextView tvTimeMainAct;
+    //====
+
+    //Для работы с таймером====
     private CountDownTimer countDownTimer; //Для работы с таймером
-    private long timeLeftInMillSeconds = 1000; //Это начальное значение таймера 10:00
+    private long timeLeftInMillSeconds = 600_000; //Начальное значение таймера - 10:00
+    private boolean timerRunning = false; //Показатель on/off таймера
+    //====
 
-    private boolean timerRunning = false;
-
+    //Для работы с рингтоном====
     Ringtone ringtone;
     Uri notificationUri;
+    //====
 
+    //Данные для логики Pomodoro==
 
-    private ImageButton btnSettingMainActivity;
+    //====
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        btnStartStopMain = findViewById(R.id.btn_startstop_main);
-        txtTimeMain = findViewById(R.id.txt_time_main);
+        init();
+        findRingtone();
+        btnStartStopMainAct.setOnClickListener(v -> {
+            startstop();
 
-        btnSettingMainActivity = findViewById(R.id.btn_setting_main_activity);
-
-        btnStartStopMain.setOnClickListener(v -> {
-            startStop();
-            if (ringtone.isPlaying()) {
-                if (ringtone != null) {
-                    ringtone.stop();
-                }
-            }
+            //Одним из функционалом кнопки startstop является отключение мелодии
+            //Если таймер сработал, то играет мелодия, то мы её отключаем, иначе нет
+            if (ringtone.isPlaying()) { finishRingtone(); }
         });
-        updateTimer(); //При включении приложения устанавливаем значения таймера по умолчанию
-        findRingtone(); //Устанавливаем рингтон
 
-          btnSettingMainActivity.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
-                startActivity(intent);
-            }
-        });
     }
 
-    public void startStop() { //Включаем таймер - когда он выключен. Выключаем - когда включен.
-        if (timerRunning) {
+
+    private void init() { //Находим все элементы на MainActivity:
+        //Для работы с таймером:
+        btnStartStopMainAct = findViewById(R.id.btn_startstop_mainAct);
+        tvTimeMainAct = findViewById(R.id.tv_time_mainAct);
+
+        imbtnSettingsMainAct = findViewById(R.id.imbtn_settings_mainAct); //Кнопка настройки
+        tvPomodoroMainAct = findViewById(R.id.tv_pomodoro_mainAct); //Главная надпись TODO: она быть может совсем не нужна для изменения - удалить значит
+    }
+
+    public void startstop() { //TODO: по поводу модификатора доступа подумать - нужен ли вообще public? private - may be? - ВО ВСЕХ МЕТОДАХ
+        if (timerRunning) { //Если таймер включён - выключаем / выключен - включаем <- при нажатии на кнопку startstop
             stopTimer();
         } else {
             startTimer();
         }
     }
 
-    public void startTimer() { //Включение таймера
-        timerRunning = true; //Отображаем, что таймер включён
-
-        countDownTimer = new CountDownTimer(timeLeftInMillSeconds, 1000) { // Начало отсчёта, шаг счёта (мс)
+    public void startTimer() { //Логика старта таймера
+        countDownTimer = new CountDownTimer(timeLeftInMillSeconds, 1000) {
             @Override
-            public void onTick(long millisUntilFinished) { //millisUntilFinished - текущее время на таймере
+            public void onTick(long millisUntilFinished) { //Что делаем, когда прошел тик
                 timeLeftInMillSeconds = millisUntilFinished;
-                updateTimer(); //Мы меняем таймер в соответствии со значением timeLeftInMillSeconds каждый тик
-                //Произошёл тик - поменяли в TextView в main_activity - алгоритм работы
+                updateTimer();
             }
 
             @Override
-            public void onFinish() { //Что делаем, когда таймер достигнет нуля
-                btnStartStopMain.setText("FINISH"); //Таймер завершился - пишем соответстующую надпись на кнопке startstop
-                if (ringtone != null) {
-                    ringtone.play();
-                }
+            public void onFinish() { //Что делаем при завершении работы таймера
+                btnStartStopMainAct.setText("FINISH!");
             }
+        }.start();
 
-        }.start(); //Включаем таймер
-
-        btnStartStopMain.setText("START"); //Таймер заработал - меняем надпись на кнопке startstop
+        btnStartStopMainAct.setText("PAUSE");
+        timerRunning = true; //Показываем, что таймер идёт
     }
 
-    public void stopTimer() { //Выключение таймера
-        countDownTimer.cancel(); //Приостанавливаем таймер
-        timerRunning = false; //Отображаем, что таймер выключен
-        btnStartStopMain.setText("START"); //Когда таймер выключен подсвечиваем соотв. фразу на кнопке startstop
+    public void stopTimer() { //Логика остановки таймера
+        countDownTimer.cancel(); //Приостанавливаем таймер (останавливаем - следуя из логики письма)
+        btnStartStopMainAct.setText("START");
+        timerRunning = false; //Показываем, что таймер остановился
     }
 
-    public void updateTimer() { //Обновление данных таймера
-        int minutes = (int) timeLeftInMillSeconds / 60000;
-        int seconds= (int) timeLeftInMillSeconds % 60000 / 1000;
+    public void updateTimer() { //Логика обновление циферблата
+        int minutes = (int) timeLeftInMillSeconds / 60_000;
+        int seconds = (int) timeLeftInMillSeconds % 60_000 / 1000;
 
-        String timeLeftText;
+        String timeLefText; //Формируем строку вида 10:00
 
-        timeLeftText = "" + minutes;
-        timeLeftText += ":";
-        if (seconds < 10) {
-            timeLeftText += "0";
-            timeLeftText += seconds;
-        } else {
-            timeLeftText += seconds;
+        timeLefText = "" + minutes;
+        timeLefText += ":";
+
+        if (seconds < 10) { //Избегаем случай 10:5 -> 10:05
+            timeLefText += "0";
         }
 
-        txtTimeMain.setText(timeLeftText);
+        timeLefText += seconds;
+
+        tvTimeMainAct.setText(timeLefText); //Сформированную строку показываем на циферблате пользователю
     }
 
-    public void findRingtone() {
-        notificationUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+    public void findRingtone() { //Ищём рингтон из телефона пользователя: TODO: Добавить нормальное и правильное описание ниже написанных строк
+        //Проиграем мелодию, установленную в системе по умолчанию:
+        //Запрашиваем у RingtoneManager дефолтные Uri для звука будильника
+        Uri notificationUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+        //А теперь сам рингтонл
         ringtone = RingtoneManager.getRingtone(this, notificationUri);
 
+        //Если рингтона по умолчанию нет, то попробуем достать звук звонка:
         if (ringtone == null) {
-            //Если рингтона по умолчанию нет, то попробуем достать звук звонка:
             notificationUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
             ringtone = RingtoneManager.getRingtone(this, notificationUri);
+        }
+    }
+
+    public void finishRingtone() { //Выключение проигрывания рингтона:
+        if (ringtone != null) {
+            ringtone.stop();
         }
     }
 }

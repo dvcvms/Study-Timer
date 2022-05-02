@@ -10,7 +10,7 @@
     tools:context=".MainActivity">
 
     <ImageButton
-        android:id="@+id/btn_setting_main_activity"
+        android:id="@+id/imbtn_settings_mainAct"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -22,7 +22,7 @@
         tools:ignore="SpeakableTextPresentCheck" />
 
     <TextView
-        android:id="@+id/txt_pomodoro_main"
+        android:id="@+id/tv_pomodoro_mainAct"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -36,7 +36,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/btn_startstop_main"
+        android:id="@+id/btn_startstop_mainAct"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
@@ -44,10 +44,10 @@
         android:backgroundTint="@color/btnStartMain"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_time_main" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_time_mainAct" />
 
     <TextView
-        android:id="@+id/txt_time_main"
+        android:id="@+id/tv_time_mainAct"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="100dp"
@@ -56,5 +56,5 @@
         android:textColor="@color/txtTimeMain"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_pomodoro_main" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_pomodoro_mainAct" />
 </androidx.constraintlayout.widget.ConstraintLayout>
