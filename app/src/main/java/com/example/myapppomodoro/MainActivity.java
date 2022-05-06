@@ -1,15 +1,24 @@
 package com.example.myapppomodoro;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.content.DialogInterface;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.text.Layout;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+
+import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
     //Объявили все элементы MainActivity====
@@ -21,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
 
     //Для работы с таймером====
     private CountDownTimer countDownTimer; //Для работы с таймером
-    private long timeLeftInMillSeconds = 600_000; //Начальное значение таймера - 10:00
+    private long timeLeftInMillSeconds = 600_0; //Начальное значение таймера - 10:00
     private boolean timerRunning = false; //Показатель on/off таймера
     //====
 
@@ -31,6 +40,17 @@ public class MainActivity extends AppCompatActivity {
     //====
 
     //Данные для логики Pomodoro==
+        private int workTime;
+        private int shortBreak;
+        private int longBreak;
+        private int cycles;
+
+        private EditText edTxtWorkTime;
+        private EditText edTxtShortBreak;
+        private EditText edTxtLongBreak;
+        private EditText edTxtCycles;
+
+        private Button testbtn; //TODO: удалить потом
 
     //====
 
@@ -48,6 +68,9 @@ public class MainActivity extends AppCompatActivity {
             //Если таймер сработал, то играет мелодия, то мы её отключаем, иначе нет
             if (ringtone.isPlaying()) { finishRingtone(); }
         });
+        imbtnSettingsMainAct.setOnClickListener(v -> {
+            //Создаём диалог настроек, при нажатии на кнпоку настройки:
+            SettingDialog(); });
 
     }
 
@@ -79,6 +102,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFinish() { //Что делаем при завершении работы таймера
+                ringtone.play();
                 btnStartStopMainAct.setText("FINISH!");
             }
         }.start();
@@ -130,4 +154,46 @@ public class MainActivity extends AppCompatActivity {
             ringtone.stop();
         }
     }
+
+    public void SettingDialog() { //TODO: добавить описание всего написанного
+        //https://stackoverflow.com/questions/18352324/how-can-can-i-add-custom-buttons-into-an-alertdialogs-layout?newreg=6ff112c896204cadbbb395cacc191aa1
+
+        LayoutInflater layoutInflater = LayoutInflater.from(this);
+        View promtView = layoutInflater.inflate(R.layout.settings_dialog, null); //TODO: поменять название promtView
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setView(promtView);
+
+        testbtn = promtView.findViewById(R.id.testbtn);
+
+        edTxtWorkTime = promtView.findViewById(R.id.edTxt_workTime_dialogSet);
+        edTxtShortBreak = promtView.findViewById(R.id.edTxt_shortBreak_dialogSet);
+        edTxtLongBreak = promtView.findViewById(R.id.edTxt_longBreak_dialogSet);
+        edTxtCycles = promtView.findViewById(R.id.edTxt_cycles_dialogSet);
+
+        testbtn.setOnClickListener(v -> {
+            workTime = Integer.parseInt(edTxtWorkTime.getText().toString());
+            shortBreak = Integer.parseInt(edTxtShortBreak.getText().toString());
+            longBreak = Integer.parseInt(edTxtLongBreak.getText().toString());
+            cycles = Integer.parseInt(edTxtCycles.getText().toString());
+        });
+
+
+        AlertDialog alertD = builder.create();
+        alertD.show();
+    }
+
+
+    /*public void SettingDialog() { //TODO: добавить описание всего написанного
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+
+
+
+        ConstraintLayout cl = (ConstraintLayout) getLayoutInflater().inflate(R.layout.settings_dialog, null);
+        builder.setView(cl);
+        builder.show();
+    }*/
+
 }
