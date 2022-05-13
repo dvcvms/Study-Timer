@@ -42,12 +42,20 @@ public class MainActivity extends AppCompatActivity {
     Uri notificationUri;
     //====
 
+    //Для вывода уведомлений в случае ошибки
+    Toast toastEmptyFields;
+    //====
+
+    //Вспомогательные
+
+    private boolean settingsIsOpen = false; //Исключаем повторное открытие настроек
+    //====
+
     //Данные для логики Pomodoro==
     private SharedPreferences workTime;
     private SharedPreferences shortBreak;
     private SharedPreferences longBreak;
     private SharedPreferences cycles;
-    private SharedPreferences firstOnApp;
 
     private int counterSwitch = 0; //Вспомогательная вещь для переключения
 
@@ -55,9 +63,6 @@ public class MainActivity extends AppCompatActivity {
     final String SAVED_TXT_SHORT_BREAK = "SHORT_BREAK_SAVED";
     final String SAVED_TXT_LONG_BREAK = "LONG_BREAK_SAVED";
     final String SAVED_TXT_CYCLES = "CYCLES_SAVED";
-    final String SAVED_TXT_FIRST_onAPP = "FIRST_SAVED";
-
-    //private boolean change = false; не используется
 
     private EditText edTxtWorkTime;
     private EditText edTxtShortBreak;
@@ -76,7 +81,6 @@ public class MainActivity extends AppCompatActivity {
         //Устанавливаем портретный вид экрана в силу отсутствия необходмисоти поворота
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        //firstOnApp_InitialParameters();
         init();
         findRingtone();
         btnStartStopMainAct.setOnClickListener(v -> {
@@ -89,8 +93,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         imbtnSettingsMainAct.setOnClickListener(v -> {
-            //Создаём диалог настроек, при нажатии на кнпоку настройки:
-            SettingDialog();
+            if (!settingsIsOpen) {
+                settingsIsOpen = true;
+                //Создаём диалог настроек, при нажатии на кнпоку настройки:
+                SettingDialog();
+            }
         });
 
     }
@@ -144,6 +151,7 @@ public class MainActivity extends AppCompatActivity {
         btnStartStopMainAct.setText("START");
         timerRunning = false; //Показываем, что таймер остановился
     }
+
     public void updateTimer() { //Логика обновление циферблата
 
         int minutes = (int) timeLeftInMillSeconds / 60000;
@@ -204,40 +212,61 @@ public class MainActivity extends AppCompatActivity {
 
         setTextToSettingParameters();
 
-        testbtn.setOnClickListener(v -> {
+        testbtn.setOnClickListener(v -> { //Заменить название кнопки testbtn <--
 
-            workTime = getPreferences(MODE_PRIVATE);
-            shortBreak = getPreferences(MODE_PRIVATE);
-            longBreak = getPreferences(MODE_PRIVATE);
-            cycles = getPreferences(MODE_PRIVATE);
+            if (! (isEmpty(edTxtWorkTime) || isEmpty(edTxtShortBreak) || isEmpty(edTxtLongBreak) || isEmpty(edTxtCycles) )) {
+                //Проверили на непустоту строки. Теперь проверка на корректность - строка состоит только из 0..9
 
-            SharedPreferences.Editor editorWorkTime = workTime.edit();
-            SharedPreferences.Editor editorShortBreak = shortBreak.edit();
-            SharedPreferences.Editor editorLongBreak = longBreak.edit();
-            SharedPreferences.Editor editorCycles = cycles.edit();
+                if (checkBannendSymbol(edTxtWorkTime) && checkBannendSymbol(edTxtShortBreak) && checkBannendSymbol(edTxtLongBreak) && checkBannendSymbol(edTxtCycles)) {
+                    workTime = getPreferences(MODE_PRIVATE);
+                    shortBreak = getPreferences(MODE_PRIVATE);
+                    longBreak = getPreferences(MODE_PRIVATE);
+                    cycles = getPreferences(MODE_PRIVATE);
 
-            editorWorkTime.putInt(SAVED_TXT_WORK_TIME, Integer.parseInt(edTxtWorkTime.getText().toString()));
-            editorShortBreak.putInt(SAVED_TXT_SHORT_BREAK, Integer.parseInt(edTxtShortBreak.getText().toString()));
-            editorLongBreak.putInt(SAVED_TXT_LONG_BREAK, Integer.parseInt(edTxtLongBreak.getText().toString()));
-            editorCycles.putInt(SAVED_TXT_CYCLES, Integer.parseInt(edTxtCycles.getText().toString()));
+                    SharedPreferences.Editor editorWorkTime = workTime.edit();
+                    SharedPreferences.Editor editorShortBreak = shortBreak.edit();
+                    SharedPreferences.Editor editorLongBreak = longBreak.edit();
+                    SharedPreferences.Editor editorCycles = cycles.edit();
 
-            editorWorkTime.commit();
-            editorShortBreak.commit();
-            editorLongBreak.commit();
-            editorCycles.commit();
+                    editorWorkTime.putInt(SAVED_TXT_WORK_TIME, Integer.parseInt(edTxtWorkTime.getText().toString()));
+                    editorShortBreak.putInt(SAVED_TXT_SHORT_BREAK, Integer.parseInt(edTxtShortBreak.getText().toString()));
+                    editorLongBreak.putInt(SAVED_TXT_LONG_BREAK, Integer.parseInt(edTxtLongBreak.getText().toString()));
+                    editorCycles.putInt(SAVED_TXT_CYCLES, Integer.parseInt(edTxtCycles.getText().toString()));
 
-            if (timerRunning) {
-                startstop();
+                    editorWorkTime.commit();
+                    editorShortBreak.commit();
+                    editorLongBreak.commit();
+                    editorCycles.commit();
+
+                    if (timerRunning) {
+                        startstop();
+                    }
+                    //После
+                    timeLeftInMillSeconds = workTime.getInt(SAVED_TXT_WORK_TIME, 50) * 60 * 1000;
+                    updateTimer();
+                } else {
+                    Toast.makeText(this, "Некорректный ввод!", Toast.LENGTH_LONG).show();
+                }
+
+            } else {
+                //Доделать логику, чтобы нового сообщения не выводилось, раз есть иное
+                Toast.makeText(this, "Поля не должны быть пустыми!", Toast.LENGTH_LONG).show();
             }
-            //После
-            timeLeftInMillSeconds = workTime.getInt(SAVED_TXT_WORK_TIME, 50) * 60 * 1000;
-            updateTimer();
-
         });
+
+
 
 
         AlertDialog alertD = builder.create();
         alertD.show();
+
+        alertD.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                settingsIsOpen = false;
+            }
+        });
+
     }
 
     private void setTextToSettingParameters() {
@@ -263,31 +292,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void firstOnApp_InitialParameters() {
-        workTime = getPreferences(MODE_PRIVATE);
-        shortBreak = getPreferences(MODE_PRIVATE);
-        longBreak = getPreferences(MODE_PRIVATE);
-        cycles = getPreferences(MODE_PRIVATE);
-        firstOnApp = getPreferences(MODE_PRIVATE);
-
-        SharedPreferences.Editor editorWorkTime = workTime.edit();
-        SharedPreferences.Editor editorShortBreak = shortBreak.edit();
-        SharedPreferences.Editor editorLongBreak = longBreak.edit();
-        SharedPreferences.Editor editorCycles = cycles.edit();
-        SharedPreferences.Editor editorFirstOnApp = firstOnApp.edit();
-
-        editorWorkTime.putInt(SAVED_TXT_WORK_TIME, 50);
-        editorShortBreak.putInt(SAVED_TXT_SHORT_BREAK, 10);
-        editorLongBreak.putInt(SAVED_TXT_LONG_BREAK, 20);
-        editorCycles.putInt(SAVED_TXT_CYCLES, 4);
-        editorFirstOnApp.putBoolean(SAVED_TXT_FIRST_onAPP, true);
-
-        editorWorkTime.commit();
-        editorShortBreak.commit();
-        editorLongBreak.commit();
-        editorCycles.commit();
-    }
-
     private void change() {
         if (counterSwitch == (cycles.getInt(SAVED_TXT_CYCLES, 2) * 2 - 1) ) {
             counterSwitch = 0; //Вроде ноль, но протестировать все
@@ -301,6 +305,32 @@ public class MainActivity extends AppCompatActivity {
         }
         updateTimer();
     }
-}
 
-//TODO: решить проблему с поворотом экрана - заблокировать
+    private boolean isEmpty(EditText editText) {
+        if (editText.getText().toString().trim().length() > 0) {
+            return false;
+        }
+        return true;
+    }
+
+    private boolean checkBannendSymbol(EditText editText) {
+
+        String str, test = "0123456789";
+        boolean result;
+
+        str = editText.getText().toString();
+
+        for (int i = 0; i < str.length(); i++) {
+            result = false;
+
+            for (int j = 0; j < 10; j++) {
+                if (str.charAt(i) == test.charAt(j)) { result = true; break; } //Обдуманно добавить break для повышения эффективности
+            }
+
+            //Имеется запрещенный символ
+            if (result == false) { return false; }
+        }
+        return true;
+    }
+
+}
