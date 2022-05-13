@@ -15,7 +15,7 @@
     <color name="tvSettingsSetAct">#000000</color>
     <color name="tvSettingsParameters">#000000</color>
     <color name="edTxtSettingParameters">#000000</color>
-
+    <color name="btnSettingUpdate">#FF1800</color>
     <color name="colourUpNavigation">#FF5240</color>
     <color name="buttoncolour">#FF000000</color>
 
