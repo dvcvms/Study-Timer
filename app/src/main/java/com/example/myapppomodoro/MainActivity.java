@@ -2,7 +2,6 @@ package com.example.myapppomodoro;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -12,7 +11,6 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -20,8 +18,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
     //Объявили все элементы MainActivity====
@@ -33,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
     //Для работы с таймером====
     private CountDownTimer countDownTimer; //Для работы с таймером
-    private long timeLeftInMillSeconds; //Начальное значение таймера - 10:00
+    private long timeLeftInMillSeconds;
     private boolean timerRunning = false; //Показатель on/off таймера
     //====
 
@@ -69,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText edTxtLongBreak;
     private EditText edTxtCycles;
 
-    private Button testbtn; //TODO: удалить потом
+    private Button btnUpdateSettings;
 
     //====
 
@@ -102,7 +98,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
     private void init() {
         //Находим все элементы на MainActivity:
         //Для работы с таймером:
@@ -116,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
         updateTimer();
     }
 
-    public void startstop() { //TODO: по поводу модификатора доступа подумать - нужен ли вообще public? private - may be? - ВО ВСЕХ МЕТОДАХ
+    private void startstop() {
         if (timerRunning) { //Если таймер включён - выключаем / выключен - включаем <- при нажатии на кнопку startstop
             stopTimer();
         } else {
@@ -124,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void startTimer() { //Логика старта таймера
+    private void startTimer() { //Логика старта таймера
         countDownTimer = new CountDownTimer(timeLeftInMillSeconds, 1000) {
             @Override
             public void onTick(long millisUntilFinished) { //Что делаем, когда прошел тик
@@ -146,13 +141,13 @@ public class MainActivity extends AppCompatActivity {
         btnStartStopMainAct.setText("PAUSE");
     }
 
-    public void stopTimer() { //Логика остановки таймера
+    private void stopTimer() { //Логика остановки таймера
         countDownTimer.cancel(); //Приостанавливаем таймер (останавливаем - следуя из логики письма)
         btnStartStopMainAct.setText("START");
         timerRunning = false; //Показываем, что таймер остановился
     }
 
-    public void updateTimer() { //Логика обновление циферблата
+    private void updateTimer() { //Логика обновление циферблата
 
         int minutes = (int) timeLeftInMillSeconds / 60000;
         int seconds = (int) timeLeftInMillSeconds % 60000 / 1000;
@@ -171,8 +166,8 @@ public class MainActivity extends AppCompatActivity {
         tvTimeMainAct.setText(timeLefText); //Сформированную строку показываем на циферблате пользователю
     }
 
-    public void findRingtone() {
-        //Ищём рингтон из телефона пользователя: TODO: Добавить нормальное и правильное описание ниже написанных строк
+    private void findRingtone() {
+        //Ищём рингтон из телефона пользователя:
         //Проиграем мелодию, установленную в системе по умолчанию:
         //Запрашиваем у RingtoneManager дефолтные Uri для звука будильника
         Uri notificationUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
@@ -186,13 +181,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void finishRingtone() { //Выключение проигрывания рингтона:
+    private void finishRingtone() { //Выключение проигрывания рингтона:
         if (ringtone != null) {
             ringtone.stop();
         }
     }
 
-    public void SettingDialog() {
+    private void SettingDialog() {
         //TODO: добавить описание всего написанного
         //https://stackoverflow.com/questions/18352324/how-can-can-i-add-custom-buttons-into-an-alertdialogs-layout?newreg=6ff112c896204cadbbb395cacc191aa1
 
@@ -203,7 +198,7 @@ public class MainActivity extends AppCompatActivity {
 
         builder.setView(promtView);
 
-        testbtn = promtView.findViewById(R.id.testbtn);
+        btnUpdateSettings = promtView.findViewById(R.id.btnUpdateSettings);
 
         edTxtWorkTime = promtView.findViewById(R.id.edTxt_workTime_dialogSet);
         edTxtShortBreak = promtView.findViewById(R.id.edTxt_shortBreak_dialogSet);
@@ -212,7 +207,10 @@ public class MainActivity extends AppCompatActivity {
 
         setTextToSettingParameters();
 
-        testbtn.setOnClickListener(v -> { //Заменить название кнопки testbtn <--
+        AlertDialog alertD = builder.create();
+        alertD.show();
+
+        btnUpdateSettings.setOnClickListener(v -> {
 
             if (! (isEmpty(edTxtWorkTime) || isEmpty(edTxtShortBreak) || isEmpty(edTxtLongBreak) || isEmpty(edTxtCycles) )) {
                 //Проверили на непустоту строки. Теперь проверка на корректность - строка состоит только из 0..9
@@ -244,6 +242,7 @@ public class MainActivity extends AppCompatActivity {
                     //После
                     timeLeftInMillSeconds = workTime.getInt(SAVED_TXT_WORK_TIME, 50) * 60 * 1000;
                     updateTimer();
+                    alertD.cancel();
                 } else {
                     Toast.makeText(this, "Некорректный ввод!", Toast.LENGTH_LONG).show();
                 }
@@ -253,12 +252,6 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this, "Поля не должны быть пустыми!", Toast.LENGTH_LONG).show();
             }
         });
-
-
-
-
-        AlertDialog alertD = builder.create();
-        alertD.show();
 
         alertD.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override

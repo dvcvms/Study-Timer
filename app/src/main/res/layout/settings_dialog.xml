@@ -23,7 +23,7 @@
         android:id="@+id/tv_workTime_dialogSet"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
+        android:layout_marginStart="60dp"
         android:layout_marginTop="45dp"
         android:text="WorkTime:"
         android:textColor="@color/tvSettingsParameters"
@@ -72,11 +72,11 @@
 
     <EditText
         android:id="@+id/edTxt_workTime_dialogSet"
-        android:layout_width="106dp"
+        android:layout_width="70dp"
         android:layout_height="44dp"
         android:layout_marginStart="68dp"
         android:layout_marginTop="28dp"
-        android:layout_marginEnd="83dp"
+        android:layout_marginEnd="60dp"
         android:ems="10"
         android:inputType="numberDecimal"
         android:textColor="@color/edTxtSettingParameters"
@@ -87,11 +87,11 @@
 
     <EditText
         android:id="@+id/edTxt_shortBreak_dialogSet"
-        android:layout_width="112dp"
-        android:layout_height="40dp"
+        android:layout_width="70dp"
+        android:layout_height="44dp"
         android:layout_marginStart="68dp"
         android:layout_marginTop="20dp"
-        android:layout_marginEnd="82dp"
+        android:layout_marginEnd="60dp"
         android:ems="10"
         android:inputType="numberDecimal"
         android:textColor="@color/edTxtSettingParameters"
@@ -102,11 +102,11 @@
 
     <EditText
         android:id="@+id/edTxt_longBreak_dialogSet"
-        android:layout_width="115dp"
-        android:layout_height="34dp"
+        android:layout_width="70dp"
+        android:layout_height="44dp"
         android:layout_marginStart="68dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="81dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="60dp"
         android:ems="10"
         android:inputType="numberDecimal"
         android:textColor="@color/edTxtSettingParameters"
@@ -117,11 +117,11 @@
 
     <EditText
         android:id="@+id/edTxt_cycles_dialogSet"
-        android:layout_width="116dp"
-        android:layout_height="41dp"
+        android:layout_width="70dp"
+        android:layout_height="44dp"
         android:layout_marginStart="84dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="79dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="60dp"
         android:ems="10"
         android:inputType="numberDecimal"
         android:textColor="@color/edTxtSettingParameters"
@@ -131,7 +131,7 @@
         app:layout_constraintTop_toBottomOf="@+id/edTxt_longBreak_dialogSet" />
 
     <Button
-        android:id="@+id/testbtn"
+        android:id="@+id/btnUpdateSettings"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="213dp"
