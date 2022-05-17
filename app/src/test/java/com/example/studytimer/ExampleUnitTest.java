@@ -1,4 +1,4 @@
-package com.example.myapppomodoro;
+package com.example.studytimer;
 
 import org.junit.Test;
 
