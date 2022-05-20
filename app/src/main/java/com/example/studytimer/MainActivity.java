@@ -130,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onFinish() { //Что делаем при завершении работы таймера
                 ringtone.play();
-                btnStartStopMainAct.setText("PAUSE!");
+                btnStartStopMainAct.setText("СТОП!");
                 counterSwitch++;
                 timerRunning = false;
                 change();
@@ -138,12 +138,12 @@ public class MainActivity extends AppCompatActivity {
             }
         }.start();
         timerRunning = true; //Показываем, что таймер идёт
-        btnStartStopMainAct.setText("PAUSE");
+        btnStartStopMainAct.setText("ПАУЗА");
     }
 
     private void stopTimer() { //Логика остановки таймера
         countDownTimer.cancel(); //Приостанавливаем таймер (останавливаем - следуя из логики письма)
-        btnStartStopMainAct.setText("START");
+        btnStartStopMainAct.setText("СТАРТ");
         timerRunning = false; //Показываем, что таймер остановился
     }
 
@@ -280,7 +280,7 @@ public class MainActivity extends AppCompatActivity {
     private void setInitialParameters() {
 
         workTime = getPreferences(MODE_PRIVATE);
-        btnStartStopMainAct.setText("START");
+        btnStartStopMainAct.setText("СТАРТ");
         timeLeftInMillSeconds = workTime.getInt(SAVED_TXT_WORK_TIME, 50) * 60 * 1000;
 
     }

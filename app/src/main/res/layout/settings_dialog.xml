@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="Settings"
+        android:text="Настройки"
         android:textColor="@color/tvSettingsSetAct"
         android:textSize="30dp"
 
@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="60dp"
         android:layout_marginTop="45dp"
-        android:text="WorkTime:"
+        android:text="Рабочее время:"
         android:textColor="@color/tvSettingsParameters"
         android:textSize="15dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -36,7 +36,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="45dp"
-        android:text="ShortBreak"
+        android:text="Короткий перерыв:"
         android:textColor="@color/tvSettingsParameters"
         android:textSize="15dp"
         app:layout_constraintEnd_toEndOf="@+id/tv_workTime_dialogSet"
@@ -48,7 +48,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="45dp"
-        android:text="LongBreak:"
+        android:text="Длинный перерыв:"
         android:textColor="@color/tvSettingsParameters"
         android:textSize="15dp"
         app:layout_constraintEnd_toEndOf="@+id/tv_shortBreak_dialogSet"
@@ -57,11 +57,11 @@
 
     <TextView
         android:id="@+id/tv_longBreak_dialogSet3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="142dp"
+        android:layout_height="39dp"
         android:layout_marginTop="45dp"
         android:layout_marginBottom="30dp"
-        android:text="Cycles:"
+        android:text="Интервал длинного перерыва:"
         android:textColor="@color/tvSettingsParameters"
         android:textSize="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -74,14 +74,13 @@
         android:id="@+id/edTxt_workTime_dialogSet"
         android:layout_width="70dp"
         android:layout_height="44dp"
-        android:layout_marginStart="68dp"
-        android:layout_marginTop="28dp"
-        android:layout_marginEnd="60dp"
+        android:layout_marginTop="32dp"
         android:ems="10"
         android:inputType="numberDecimal"
         android:textColor="@color/edTxtSettingParameters"
         android:textSize="20dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.424"
         app:layout_constraintStart_toEndOf="@+id/tv_workTime_dialogSet"
         app:layout_constraintTop_toBottomOf="@+id/tv_settings_dialogSet" />
 
@@ -89,14 +88,13 @@
         android:id="@+id/edTxt_shortBreak_dialogSet"
         android:layout_width="70dp"
         android:layout_height="44dp"
-        android:layout_marginStart="68dp"
         android:layout_marginTop="20dp"
-        android:layout_marginEnd="60dp"
         android:ems="10"
         android:inputType="numberDecimal"
         android:textColor="@color/edTxtSettingParameters"
         android:textSize="20dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.373"
         app:layout_constraintStart_toEndOf="@+id/tv_shortBreak_dialogSet"
         app:layout_constraintTop_toBottomOf="@+id/edTxt_workTime_dialogSet" />
 
@@ -104,14 +102,13 @@
         android:id="@+id/edTxt_longBreak_dialogSet"
         android:layout_width="70dp"
         android:layout_height="44dp"
-        android:layout_marginStart="68dp"
         android:layout_marginTop="20dp"
-        android:layout_marginEnd="60dp"
         android:ems="10"
         android:inputType="numberDecimal"
         android:textColor="@color/edTxtSettingParameters"
         android:textSize="20dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.377"
         app:layout_constraintStart_toEndOf="@+id/tv_longBreak_dialogSet"
         app:layout_constraintTop_toBottomOf="@+id/edTxt_shortBreak_dialogSet" />
 
@@ -119,14 +116,13 @@
         android:id="@+id/edTxt_cycles_dialogSet"
         android:layout_width="70dp"
         android:layout_height="44dp"
-        android:layout_marginStart="84dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="60dp"
+        android:layout_marginTop="36dp"
         android:ems="10"
         android:inputType="numberDecimal"
         android:textColor="@color/edTxtSettingParameters"
         android:textSize="20dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.361"
         app:layout_constraintStart_toEndOf="@+id/tv_longBreak_dialogSet3"
         app:layout_constraintTop_toBottomOf="@+id/edTxt_longBreak_dialogSet" />
 
@@ -138,12 +134,45 @@
         android:layout_marginTop="350dp"
         android:layout_marginEnd="104dp"
         android:layout_marginBottom="20dp"
-        android:text="UPDATE"
         android:backgroundTint="@color/btnSettingUpdate"
+        android:text="ОБНОВИТЬ"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="92dp"
+        android:text="(мин)"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.308"
+        app:layout_constraintStart_toEndOf="@+id/edTxt_workTime_dialogSet"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="46dp"
+        android:text="(мин)"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.298"
+        app:layout_constraintStart_toEndOf="@+id/edTxt_shortBreak_dialogSet"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="47dp"
+        android:text="(мин)"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.298"
+        app:layout_constraintStart_toEndOf="@+id/edTxt_longBreak_dialogSet"
+        app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
